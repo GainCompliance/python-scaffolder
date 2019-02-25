@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+EXIT_STATUS=0
+rm -f .coverage
+export GAIN_ENV=test
+nosetests test --with-randomly --with-coverage --cover-package={{projectName}} --processes=-1 || EXIT_STATUS=$?
+flake8 ./{{projectName}} || EXIT_STATUS=$?
+
+exit ${EXIT_STATUS}
+
