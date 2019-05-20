@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+VERSION=`python setup.py --version --quiet 2>/dev/null`
+PACKAGE_NAME=`python setup.py --name --quiet 2>/dev/null`
+curl -v \
+  -H "Authorization: Personal ${GITHUB_TOKEN}" \
+  -H "Content-Type: application/json" \
+  --data "{\"name\":\"${PACKAGE_NAME}\",\"version\": \"${VERSION}\", \"package-manager\": \"pip\"}" \
+  https://api.dependabot.com/release_notifications/private

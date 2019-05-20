@@ -20,19 +20,35 @@ suite('scaffolder', () => {
   test('that the test file is written', async () => {
     const projectName = any.word();
     const projectRoot = any.word();
+    const description = any.sentence();
 
-    await scaffold({projectName, projectRoot})
+    await scaffold({description, projectName, projectRoot})
       .then(() => {
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`--cover-package=${projectName}`)
+          sinon.match(`pytest --cov=${projectName}`)
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`flake8 ./${projectName}`)
+          sinon.match(`flake8 ${projectName}`)
         );
+        assert.calledWith(fs.writeFile, `${projectRoot}/Pipfile`);
+        assert.calledWith(
+          fs.writeFile,
+          `${projectRoot}/setup.cfg`,
+          sinon.match(`version_variable = ${projectName}/__init__.py:__version__`)
+        );
+        assert.calledWith(
+          fs.writeFile,
+          `${projectRoot}/setup.py`,
+          sinon.match(`description='${description}'`)
+        );
+        assert.calledWith(fs.writeFile, `${projectRoot}/pipenv.sh`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/deploy_to_gemfury.sh`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/notify_dependabot.sh`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/.gitignore`);
       });
   });
 });

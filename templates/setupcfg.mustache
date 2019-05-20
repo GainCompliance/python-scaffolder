@@ -1,0 +1,7 @@
+[semantic_release]
+version_variable = {{projectName}}/__init__.py:__version__
+upload_to_pypi = False
+commit_parser = pygain_dev.commit_parser.parse_commit
+
+[flake8]
+ignore = E501

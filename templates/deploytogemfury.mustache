@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+git fetch --depth=10000 --tags                                      #
+git tag -l --points-at HEAD > VERSION
+if [ ! -s VERSION ]; then
+  echo "No version number specified. Not deploying."
+  exit 0
+fi
+echo -n "Version number: "
+cat VERSION
+echo
+python setup.py sdist
+if [ $? -eq 111 ]
+then
+    echo "found no tags to publish python package for, exiting gracefully"
+    exit 0
+fi
+pip install --upgrade twine
+twine upload --repository-url https://pypi.fury.io/gain-bot/ --username "T9j6nuX7inNPGip1D3io" --password "" dist/*
+./notify_dependabot.sh
