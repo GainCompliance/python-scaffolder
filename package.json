@@ -10,7 +10,8 @@
     "access": "public"
   },
   "files": [
-    "lib/"
+    "lib/",
+    "templates/"
   ],
   "repository": "GainCompliance/python-scaffolder",
   "bugs": "https://github.com/GainCompliance/python-scaffolder/issues",
