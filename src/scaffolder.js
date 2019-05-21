@@ -100,6 +100,7 @@ export async function scaffold({
       }
     },
     documentation: scaffoldDocumentation(),
-    verificationCommand: './pipenv.sh; pipenv run ./tests.sh'
+    verificationCommand: './pipenv.sh; pipenv run ./tests.sh',
+    projectDetails: {}
   };
 }
