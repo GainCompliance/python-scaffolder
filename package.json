@@ -57,6 +57,7 @@
   "dependencies": {
     "chalk": "2.4.2",
     "mustache": "3.0.1",
-    "mz": "2.7.0"
+    "mz": "2.7.0",
+    "to-case": "2.0.0"
   }
 }

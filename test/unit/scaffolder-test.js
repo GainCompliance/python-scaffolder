@@ -11,36 +11,42 @@ suite('scaffolder', () => {
   setup(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(fs, 'writeFile');
+    sandbox.stub(fs, 'mkdir');
 
     fs.writeFile.resolves();
+    fs.mkdir.resolves();
   });
 
   teardown(() => sandbox.restore());
 
   test('that the test file is written', async () => {
-    const projectName = any.word();
+    const projectName = 'blah-some-kebab-project';
+    const projectNameSnakeCase = 'blah_some_kebab_project';
     const projectRoot = any.word();
     const description = any.sentence();
 
     await scaffold({description, projectName, projectRoot})
       .then(() => {
+        assert.calledWith(fs.mkdir, `${projectRoot}/${projectNameSnakeCase}`);
+        assert.calledWith(fs.mkdir, `${projectRoot}/test`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/${projectNameSnakeCase}/__init__.py`);
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`pytest --cov=${projectName}`),
+          sinon.match(`pytest --cov=${projectNameSnakeCase}`),
           {mode: 0o755}
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`flake8 ${projectName}`),
+          sinon.match(`flake8 ${projectNameSnakeCase}`),
           {mode: 0o755}
         );
         assert.calledWith(fs.writeFile, `${projectRoot}/Pipfile`);
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/setup.cfg`,
-          sinon.match(`version_variable = ${projectName}/__init__.py:__version__`)
+          sinon.match(`version_variable = ${projectNameSnakeCase}/__init__.py:__version__`)
         );
         assert.calledWith(
           fs.writeFile,

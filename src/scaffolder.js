@@ -1,7 +1,8 @@
 import chalk from 'chalk';
 import mustache from 'mustache';
-import {readFile, writeFile} from 'mz/fs';
+import {mkdir, readFile, writeFile} from 'mz/fs';
 import {resolve} from 'path';
+import toCase from 'to-case';
 
 import scaffoldDocumentation from './documentation';
 
@@ -12,11 +13,17 @@ export async function scaffold({
 }) {
   console.error(chalk.blue('Initializing Python project'));     // eslint-disable-line no-console
 
+  await mkdir(`${projectRoot}/${toCase.snake(projectName)}`);
+  await mkdir(`${projectRoot}/test`);
+  await writeFile(
+    `${projectRoot}/${toCase.snake(projectName)}/__init__.py`,
+    mustache.render(await readFile(resolve(__dirname, '..', 'templates/__init__.mustache'), 'utf8'))
+  );
   await writeFile(
     `${projectRoot}/tests.sh`,
     mustache.render(
       await readFile(resolve(__dirname, '..', 'templates/tests.mustache'), 'utf8'),
-      {projectName}
+      {projectName: toCase.snake(projectName)}
     ),
     {mode: 0o755}
   );
@@ -31,7 +38,7 @@ export async function scaffold({
     `${projectRoot}/setup.cfg`,
     mustache.render(
       await readFile(resolve(__dirname, '..', 'templates/setupcfg.mustache'), 'utf8'),
-      {projectName}
+      {projectName: toCase.snake(projectName)}
     )
   );
   await writeFile(
@@ -80,6 +87,6 @@ export async function scaffold({
       }
     },
     documentation: scaffoldDocumentation(),
-    verificationCommand: 'pipenv run ./tests.sh'
+    verificationCommand: './pipenv.sh; pipenv run ./tests.sh'
   };
 }
