@@ -27,12 +27,14 @@ suite('scaffolder', () => {
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`pytest --cov=${projectName}`)
+          sinon.match(`pytest --cov=${projectName}`),
+          {mode: 755}
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
-          sinon.match(`flake8 ${projectName}`)
+          sinon.match(`flake8 ${projectName}`),
+          {mode: 755}
         );
         assert.calledWith(fs.writeFile, `${projectRoot}/Pipfile`);
         assert.calledWith(
@@ -45,9 +47,24 @@ suite('scaffolder', () => {
           `${projectRoot}/setup.py`,
           sinon.match(`description='${description}'`)
         );
-        assert.calledWith(fs.writeFile, `${projectRoot}/pipenv.sh`);
-        assert.calledWith(fs.writeFile, `${projectRoot}/deploy_to_gemfury.sh`);
-        assert.calledWith(fs.writeFile, `${projectRoot}/notify_dependabot.sh`);
+        assert.calledWith(
+          fs.writeFile,
+          `${projectRoot}/pipenv.sh`,
+          sinon.match.any,
+          {mode: 755}
+        );
+        assert.calledWith(
+          fs.writeFile,
+          `${projectRoot}/deploy_to_gemfury.sh`,
+          sinon.match.any,
+          {mode: 755},
+        );
+        assert.calledWith(
+          fs.writeFile,
+          `${projectRoot}/notify_dependabot.sh`,
+          sinon.match.any,
+          {mode: 755},
+        );
         assert.calledWith(fs.writeFile, `${projectRoot}/.gitignore`);
       });
   });
