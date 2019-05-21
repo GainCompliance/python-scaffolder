@@ -14,11 +14,18 @@ export async function scaffold({
   console.error(chalk.blue('Initializing Python project'));     // eslint-disable-line no-console
 
   await mkdir(`${projectRoot}/${toCase.snake(projectName)}`);
-  await mkdir(`${projectRoot}/test`);
   await writeFile(
     `${projectRoot}/${toCase.snake(projectName)}/__init__.py`,
     mustache.render(await readFile(resolve(__dirname, '..', 'templates/__init__.mustache'), 'utf8'))
   );
+
+  await mkdir(`${projectRoot}/test`);
+  await writeFile(`${projectRoot}/test/__init__.py`, '');
+  await writeFile(
+    `${projectRoot}/test/test_first.py`,
+    mustache.render(await readFile(resolve(__dirname, '..', 'templates/initialtest.mustache'), 'utf8'))
+  );
+
   await writeFile(
     `${projectRoot}/tests.sh`,
     mustache.render(

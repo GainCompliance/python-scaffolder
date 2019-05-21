@@ -28,7 +28,12 @@ suite('scaffolder', () => {
     await scaffold({description, projectName, projectRoot})
       .then(() => {
         assert.calledWith(fs.mkdir, `${projectRoot}/${projectNameSnakeCase}`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/${projectNameSnakeCase}/__init__.py`);
+
         assert.calledWith(fs.mkdir, `${projectRoot}/test`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/test/__init__.py`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/test/test_first.py`);
+
         assert.calledWith(fs.writeFile, `${projectRoot}/${projectNameSnakeCase}/__init__.py`);
         assert.calledWith(
           fs.writeFile,
