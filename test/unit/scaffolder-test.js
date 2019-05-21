@@ -28,13 +28,13 @@ suite('scaffolder', () => {
           fs.writeFile,
           `${projectRoot}/tests.sh`,
           sinon.match(`pytest --cov=${projectName}`),
-          {mode: 755}
+          {mode: 0o755}
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/tests.sh`,
           sinon.match(`flake8 ${projectName}`),
-          {mode: 755}
+          {mode: 0o755}
         );
         assert.calledWith(fs.writeFile, `${projectRoot}/Pipfile`);
         assert.calledWith(
@@ -51,19 +51,19 @@ suite('scaffolder', () => {
           fs.writeFile,
           `${projectRoot}/pipenv.sh`,
           sinon.match.any,
-          {mode: 755}
+          {mode: 0o755}
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/deploy_to_gemfury.sh`,
           sinon.match.any,
-          {mode: 755},
+          {mode: 0o755},
         );
         assert.calledWith(
           fs.writeFile,
           `${projectRoot}/notify_dependabot.sh`,
           sinon.match.any,
-          {mode: 755},
+          {mode: 0o755},
         );
         assert.calledWith(fs.writeFile, `${projectRoot}/.gitignore`);
       });

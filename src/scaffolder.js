@@ -18,7 +18,7 @@ export async function scaffold({
       await readFile(resolve(__dirname, '..', 'templates/tests.mustache'), 'utf8'),
       {projectName}
     ),
-    {mode: 755}
+    {mode: 0o755}
   );
   await writeFile(
     `${projectRoot}/Pipfile`,
@@ -46,21 +46,21 @@ export async function scaffold({
     mustache.render(
       await readFile(resolve(__dirname, '..', 'templates/pipenv.mustache'), 'utf8')
     ),
-    {mode: 755}
+    {mode: 0o755}
   );
   await writeFile(
     `${projectRoot}/deploy_to_gemfury.sh`,
     mustache.render(
       await readFile(resolve(__dirname, '..', 'templates/deploytogemfury.mustache'), 'utf8')
     ),
-    {mode: 755}
+    {mode: 0o755}
   );
   await writeFile(
     `${projectRoot}/notify_dependabot.sh`,
     mustache.render(
       await readFile(resolve(__dirname, '..', 'templates/notifydependabot.mustache'), 'utf8')
     ),
-    {mode: 755}
+    {mode: 0o755}
   );
   await writeFile(
     `${projectRoot}/.gitignore`,
