@@ -1,0 +1,86 @@
+version: 2
+jobs:
+  test-2.7:
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - checkout
+      - run:
+          name: Activate venv and install requirements
+          command: |
+            virtualenv ~/venv
+            echo ". ~/venv/bin/activate" >> $BASH_ENV
+            source $BASH_ENV
+            ./pipenv.sh
+      - run:
+          name: run tests
+          command: |
+            source $BASH_ENV
+            ./tests.sh
+  test-3.7:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Activate venv and install requirements
+          command: |
+            virtualenv ~/venv
+            echo ". ~/venv/bin/activate" >> $BASH_ENV
+            source $BASH_ENV
+            ./pipenv.sh
+      - run:
+          name: run tests
+          command: |
+            source $BASH_ENV
+            ./tests.sh
+      - run:
+          name: semantic-release publish
+          command: |
+            if [[ $CIRCLE_BRANCH = 'master' ]]; then
+              source $BASH_ENV
+              git config --global user.name "python-semantic-release"
+              git config --global user.email "development-public@gaincompliance.com"
+              semantic-release publish
+            fi
+  deploy:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Activate venv and install requirements
+          command: |
+            virtualenv ~/venv
+            echo ". ~/venv/bin/activate" >> $BASH_ENV
+            source $BASH_ENV
+            ./pipenv.sh
+      - run:
+          name: build distribution and push to gemfury
+          command: |
+            source $BASH_ENV
+            ./deploy_to_gemfury.sh
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - test-2.7:
+          context: python-context
+          filters:
+            tags:
+              only: /.*/
+      - test-3.7:
+          context: python-context
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          context: python-context
+          requires:
+            - test-3.7
+            - test-2.7
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/

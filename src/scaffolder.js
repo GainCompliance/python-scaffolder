@@ -13,6 +13,12 @@ export async function scaffold({
 }) {
   console.error(chalk.blue('Initializing Python project'));     // eslint-disable-line no-console
 
+  await mkdir(`${projectRoot}/.circleci`);
+  await writeFile(
+    `${projectRoot}/.circleci/config.yml`,
+    mustache.render(await readFile(resolve(__dirname, '..', 'templates/circleconfig.mustache'), 'utf8'))
+  );
+
   await mkdir(`${projectRoot}/${toCase.snake(projectName)}`);
   await writeFile(
     `${projectRoot}/${toCase.snake(projectName)}/__init__.py`,

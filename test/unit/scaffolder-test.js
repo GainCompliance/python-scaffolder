@@ -27,6 +27,9 @@ suite('scaffolder', () => {
 
     await scaffold({description, projectName, projectRoot})
       .then(() => {
+        assert.calledWith(fs.mkdir, `${projectRoot}/.circleci`);
+        assert.calledWith(fs.writeFile, `${projectRoot}/.circleci/config.yml`);
+
         assert.calledWith(fs.mkdir, `${projectRoot}/${projectNameSnakeCase}`);
         assert.calledWith(fs.writeFile, `${projectRoot}/${projectNameSnakeCase}/__init__.py`);
 
