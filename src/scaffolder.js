@@ -100,7 +100,7 @@ export async function scaffold({
       }
     },
     documentation: scaffoldDocumentation(),
-    verificationCommand: 'git add --all; git cm -m "wip(project): initial structure"; git tag v0.0.1; ./pipenv.sh; pipenv run ./tests.sh', // eslint-disable-line max-len
+    verificationCommand: 'git add --all; git cm -m "wip(project): initial structure"; git tag v0.0.1; ./pipenv.sh; pipenv run ./tests.sh; git push origin master --tags', // eslint-disable-line max-len
     projectDetails: {}
   };
 }
