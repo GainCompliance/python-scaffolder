@@ -15,5 +15,5 @@ then
     exit 0
 fi
 pip install --upgrade twine
-twine upload --repository-url https://pypi.fury.io/gain-bot/ --username "T9j6nuX7inNPGip1D3io" --password "" dist/*
+twine upload --repository-url https://pypi.fury.io/gain-bot/ --username ${GEMFURY_TOKEN} --password "" dist/*
 ./notify_dependabot.sh
